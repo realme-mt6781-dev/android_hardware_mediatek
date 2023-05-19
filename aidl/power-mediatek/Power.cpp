@@ -45,6 +45,7 @@ extern bool setDeviceSpecificMode(Mode type, bool enabled);
 
 const std::vector<Boost> SUPPORTED_BOOSTS {
     Boost::INTERACTION,
+    Boost::DISPLAY_UPDATE_IMMINENT,
 };
 
 const std::vector<Mode> SUPPORTED_MODES {
@@ -207,7 +208,7 @@ ndk::ScopedAStatus Power::isModeSupported(Mode type, bool* _aidl_return) {
 }
 
 ndk::ScopedAStatus Power::setBoost(Boost type, int32_t durationMs) {
-    int32_t mediatek_type = 0;
+    int mediatek_type = 0;
 
     if (mLowPowerEnabled) {
         LOG(VERBOSE) << "Will not perform boosts in LOW_POWER";
@@ -220,6 +221,10 @@ ndk::ScopedAStatus Power::setBoost(Boost type, int32_t durationMs) {
             if (durationMs < 1)
                 durationMs = 80;
             mediatek_type = 0; // INTERACTION
+            break;
+        case Boost::DISPLAY_UPDATE_IMMINENT:
+            LOG(VERBOSE) << "Power setBoost DISPLAY_UPDATE_IMMINENT for: " << durationMs << "ms";
+            mediatek_type = 1; // DISPLAY_UPDATE_IMMINENT
             break;
         default:
             LOG(ERROR) << "Power unknown boost type: " << static_cast<int32_t>(type);
