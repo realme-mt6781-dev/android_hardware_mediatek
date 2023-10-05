@@ -1,0 +1,28 @@
+/*
+ * SPDX-FileCopyrightText: 2023 The LineageOS Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+cc_binary {
+    name: "android.hardware.gatekeeper-service.mediatek",
+    relative_install_path: "hw",
+    init_rc: ["android.hardware.gatekeeper-service.mediatek.rc"],
+    vendor: true,
+    vintf_fragments: ["android.hardware.gatekeeper-service.mediatek.xml"],
+
+    shared_libs: [
+        "libbase",
+        "libbinder_ndk",
+        "libcutils",
+        "libgatekeeper",
+        "liblog",
+        "libutils",
+        "libhardware",
+        "android.hardware.gatekeeper-V1-ndk"
+    ],
+
+    srcs: [
+        "Gatekeeper.cpp",
+        "main.cpp"
+    ],
+}
