@@ -289,8 +289,7 @@ bool switchMode(const string &portName, const PortRole &in_role, struct Usb *usb
         pthread_mutex_unlock(&usb->mPartnerLock);
     }
 
-    if (!roleSwitch)
-        switchToDrp(string(portName.c_str()));
+    switchToDrp(string(portName.c_str()));
 
     return roleSwitch;
 }
