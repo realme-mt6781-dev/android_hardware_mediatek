@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "powerhal-libperfmgr"
+#define LOG_TAG "android.hardware.power-service.pixel.ext-libperfmgr"
 
 #include "PowerExt.h"
 
@@ -57,6 +57,10 @@ ndk::ScopedAStatus PowerExt::setMode(const std::string &mode, bool enabled) {
 
 ndk::ScopedAStatus PowerExt::isModeSupported(const std::string &mode, bool *_aidl_return) {
     bool supported = HintManager::GetInstance()->IsHintSupported(mode);
+
+    if (!supported && HintManager::GetInstance()->IsAdpfProfileSupported(mode)) {
+        supported = true;
+    }
     LOG(INFO) << "PowerExt mode " << mode << " isModeSupported: " << supported;
     *_aidl_return = supported;
     return ndk::ScopedAStatus::ok();
@@ -82,6 +86,9 @@ ndk::ScopedAStatus PowerExt::setBoost(const std::string &boost, int32_t duration
 
 ndk::ScopedAStatus PowerExt::isBoostSupported(const std::string &boost, bool *_aidl_return) {
     bool supported = HintManager::GetInstance()->IsHintSupported(boost);
+    if (!supported && HintManager::GetInstance()->IsAdpfProfileSupported(boost)) {
+        supported = true;
+    }
     LOG(INFO) << "PowerExt boost " << boost << " isBoostSupported: " << supported;
     *_aidl_return = supported;
     return ndk::ScopedAStatus::ok();
